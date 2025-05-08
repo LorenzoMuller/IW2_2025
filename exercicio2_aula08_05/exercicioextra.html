@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body.dark {
+          background-color: #222;
+          color: white;
+        }
+        .erro {
+          border: 2px solid red;
+        }
+        .square {
+          width: 50px;
+          height: 50px;
+          display: inline-block;
+          margin: 5px;
+        }
+        #paragrafo {
+          overflow: hidden;
+          transition: height 0.5s ease;
+          height: 0;
+        }
+        li {
+          margin-bottom: 5px;
+        }
+      </style>
+</head>
+<body>
+    <h2>1. Mostrar hora atual ao clicar em um botão</h2>
+<button onclick="mostrarHora()">Mostrar Hora</button>
+<p id="hora"></p>
+
+<h2>2. Trocar tema claro/escuro com ícone</h2>
+<button onclick="alternarTema()" id="temaBtn">🌞</button>
+
+<h2>3. Simular botão “curtir” com contador</h2>
+<button onclick="curtir()">❤️ Curtir (<span id="curtidas">0</span>)</button>
+
+<h2>4. Exibir alerta ao tentar sair de um campo obrigatório</h2>
+<input type="text" placeholder="Campo obrigatório" onblur="verificarCampo(this)">
+
+<h2>5. Expandir/encolher parágrafo com animação</h2>
+<button onclick="toggleParagrafo()">Expandir/Encolher</button>
+<div id="paragrafo">
+  <p>Este parágrafo será expandido ou encolhido com animação.</p>
+</div>
+
+<h2>6. Copiar conteúdo de uma div para a área de transferência</h2>
+<div id="textoCopiar">Este é o conteúdo a ser copiado.</div>
+<button onclick="copiarTexto()">Copiar</button>
+
+<h2>7. Destacar campo com erro em tempo real</h2>
+<input type="text" oninput="validarTamanho(this)" placeholder="Mínimo 5 caracteres">
+
+<h2>8. Gerar elementos com cores aleatórias</h2>
+<div onclick="gerarCores()" style="cursor:pointer; padding:10px; border:1px solid #ccc;">
+  Clique aqui para gerar quadrados coloridos
+</div>
+<div id="coresContainer"></div>
+
+<h2>9. Exibir imagem com preview antes do upload</h2>
+<input type="file" accept="image/*" onchange="mostrarPreview(event)">
+<br><img id="preview" style="max-width: 200px; display: none;">
+
+<h2>10. Reordenar itens da lista com botões de subir/descer</h2>
+<ul id="lista">
+  <li>Item 1 <button onclick="mover(this, -1)">↑</button> <button onclick="mover(this, 1)">↓</button></li>
+  <li>Item 2 <button onclick="mover(this, -1)">↑</button> <button onclick="mover(this, 1)">↓</button></li>
+  <li>Item 3 <button onclick="mover(this, -1)">↑</button> <button onclick="mover(this, 1)">↓</button></li>
+</ul>
+
+<script>
+  function mostrarHora() {
+    const agora = new Date();
+    document.getElementById('hora').innerText = agora.toLocaleTimeString();
+  }
+
+  function alternarTema() {
+    document.body.classList.toggle('dark');
+    const btn = document.getElementById('temaBtn');
+    btn.textContent = document.body.classList.contains('dark') ? '🌙' : '🌞';
+  }
+
+  let likes = 0;
+  function curtir() {
+    likes++;
+    document.getElementById('curtidas').innerText = likes;
+  }
+
+  function verificarCampo(input) {
+    if (!input.value.trim()) {
+      alert('Este campo é obrigatório!');
+    }
+  }
+
+
+  let expandido = false;
+  function toggleParagrafo() {
+    const p = document.getElementById('paragrafo');
+    p.style.height = expandido ? '0' : '60px';
+    expandido = !expandido;
+  }
+
+  function copiarTexto() {
+    const texto = document.getElementById('textoCopiar').innerText;
+    navigator.clipboard.writeText(texto).then(() => alert('Copiado!'));
+  }
+
+
+  function validarTamanho(input) {
+    input.classList.toggle('erro', input.value.length < 5);
+  }
+
+  function gerarCores() {
+    const container = document.getElementById('coresContainer');
+    container.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+      const div = document.createElement('div');
+      div.className = 'square';
+      div.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      container.appendChild(div);
+    }
+  }
+
+  function mostrarPreview(event) {
+    const img = document.getElementById('preview');
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      img.src = reader.result;
+      img.style.display = 'block';
+    };
+    if (file) reader.readAsDataURL(file);
+  }
+
+  function mover(btn, direcao) {
+    const li = btn.parentElement;
+    const ul = li.parentElement;
+    const index = Array.from(ul.children).indexOf(li);
+    const novoIndex = index + direcao;
+    if (novoIndex >= 0 && novoIndex < ul.children.length) {
+      ul.insertBefore(li, ul.children[direcao > 0 ? novoIndex + 1 : novoIndex]);
+    }
+  }
+</script>
+</body>
+</html>
