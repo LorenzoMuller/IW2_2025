@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperatura da Pagina</title>
+</head>
+<body>
+    <h1>❄️Controle a temperatura🔥</h1>
+    <div>
+        <input type="range" name="Temperatura" id="temp" max="100" min="0">
+    </div>
+
+
+ <script>
+  const slider = document.getElementById('temp');
+
+  slider.addEventListener('input', function () {
+    const valor = Number(slider.value);
+    let hue = 200 - (valor / 100) * (200 - 0);
+    document.body.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+    console.log(valor);
+  });
+</script>
+    <style>
+        body {
+  transition: background-color 0.3s ease;
+}
+        
+
+    </style>
+</body>
+</html>
